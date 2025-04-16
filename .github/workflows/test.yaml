@@ -1,0 +1,19 @@
+name: Test GET ALL and GET Requests
+
+on: [push]
+
+jobs:
+  dev-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "22.14.0"
+
+      - run: npm install
+
+      - name: Run tests
+        run: npm test
