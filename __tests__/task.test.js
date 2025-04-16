@@ -19,6 +19,7 @@ beforeAll(async() => {
 
 afterAll(async () => {
     await connection.close();
+    
 });
 
 describe('Task Routes', () => {
@@ -31,13 +32,6 @@ describe('Task Routes', () => {
     afterEach(async () => {
       await db.collection('tasks').deleteMany({});
       await db.collection('users').deleteMany({});
-    });
-
-    test('If the Tasks database is empty, Get All Tasks should return an error message', async() => {
-      await db.collection('tasks').deleteMany({});
-      const res = await request(app).get('/tasks');
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toEqual({ message: 'No tasks found' });
     });
 
     test('Get All Tasks', async () => {
@@ -54,6 +48,12 @@ describe('Task Routes', () => {
       const res = await request(app).get('/tasks');
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
+    });
+    
+    test('If the Tasks database is empty, Get All Tasks should return an error message', async() => {
+      const res = await request(app).get('/tasks');
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toEqual({ message: 'No tasks found' });
     });
 
     

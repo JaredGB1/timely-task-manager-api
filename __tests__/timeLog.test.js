@@ -19,6 +19,7 @@ beforeAll(async() => {
 
 afterAll(async () => {
     await connection.close();
+    
 });
 
 describe('Goal Routes', () => {
@@ -38,11 +39,12 @@ describe('Goal Routes', () => {
     });
 
     afterEach(async () => {
+      await db.collection('users').deleteMany({});
+      await db.collection('tasks').deleteMany({});
       await db.collection('time-logs').deleteMany({});
     });
   
     test('If the TimeLog Database is empty, Get All TimeLogs should return an error message', async() => {
-      await db.collection('time-logs').deleteMany({});
       const res = await request(app).get('/timeLogs');
       expect(res.statusCode).toBe(404);
       expect(res.body).toEqual({ message: 'No time logs found' });

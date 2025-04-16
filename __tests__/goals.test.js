@@ -17,8 +17,8 @@ beforeAll(async() => {
     app.use('/goals', goalRoutes);
 });
 
-afterAll(async () => {
-    await connection.close();
+afterAll(async () => { 
+  await connection.close();
 });
 
 describe('Goal Routes', () => {
@@ -28,15 +28,10 @@ describe('Goal Routes', () => {
     });
 
     afterEach(async () => {
+      await db.collection('users').deleteMany({});
       await db.collection('goals').deleteMany({});
     });
-  
-    test('If the Goals Database is empty, Get All Goals should return an error message', async() => {
-      const res = await request(app).get('/goals');
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toEqual({ message: 'No goals found' });
-   });
-   
+
     test('Get All Goals', async () => {
       await db.collection('goals').insertOne({
         username: "Test1",
@@ -52,6 +47,11 @@ describe('Goal Routes', () => {
       expect(res.body.length).toBeGreaterThan(0);
     });
 
+    test('If the Goals Database is empty, Get All Goals should return an error message', async() => {
+      const res = await request(app).get('/goals');
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toEqual({ message: 'No goals found' });
+    });
 
 
     test('Get Goals using a valid Username', async() => {

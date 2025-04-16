@@ -22,19 +22,12 @@ afterAll(async () => {
 });
 
 describe('User Routes', () => {
-    
+    let userId;
 
     afterEach(async () => {
       await db.collection('users').deleteMany({});
     });
   
-    test('If the Users Database is empty, Get All Users should return an error message', async() => {
-      await db.collection('users').deleteMany({});
-      const res = await request(app).get('/users');
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toEqual({ message: 'No users found' });
-    });
-
     test('Get All Users', async () => {
       await db.collection('users').insertOne({
         username: "Test1",
@@ -51,8 +44,15 @@ describe('User Routes', () => {
 
     });
 
+    test('If the Users Database is empty, Get All Users should return an error message', async() => {
+      const res = await request(app).get('/users');
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toEqual({ message: 'No users found' });
+    });
+
+
     test('Get User by ID', async() => {
-        let userId;
+        
         const user = { username: 'Test', firstName: 'Test', lastName: '0', email: 'test@example.com', birthday: '01/01/1990', creationDate: "4/16/2025 12:00:00", timeZone: 'MST' };
         const { insertedId } = await db.collection('users').insertOne(user);
         userId = insertedId;
