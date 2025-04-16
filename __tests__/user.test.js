@@ -9,10 +9,7 @@ let connection;
 let db;
 
 beforeAll(async() => {
-    connection= await MongoClient.connect(global.__MONGO_URI__, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+    connection= await MongoClient.connect(global.__MONGO_URI__);
     db = await connection.db();
     mongodb.getDB = () => ({db: () => db});
     app = express();
@@ -40,16 +37,18 @@ describe('User Routes', () => {
         creationDate: "4/16/2025 12:00:00",
         timeZone: "EST"
       });
-  
       const res = await request(app).get('/users');
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
+
     });
+
     test('If the Users Database is empty, Get All Users should return an error message', async() => {
         const res = await request(app).get('/users');
         expect(res.statusCode).toBe(404);
         expect(res.body).toEqual({ message: 'No users found' });
     });
+
     test('Get User by ID', async() => {
         const user = { username: 'Test', firstName: 'Test', lastName: '0', email: 'test@example.com', birthday: '01/01/1990', creationDate: "4/16/2025 12:00:00", timeZone: 'MST' };
         const { insertedId } = await db.collection('users').insertOne(user);
@@ -71,12 +70,14 @@ describe('User Routes', () => {
           ])
         );
     });
+
     test('Using a non-existing ID should return an error message', async()=> {
         const fakeId="67ff3d2220aba758bab0ec99";
         const res = await request(app).get(`/users/${fakeId}`);
         expect(res.statusCode).toBe(404);
         expect(res.body).toEqual({ message: 'No users found' });
     });
+    
     test('Using an Invalid ID should return an error message', async() => {
         const invalidId = "123";
         const res = await request(app).get(`/users/${invalidId}`);

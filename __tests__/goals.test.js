@@ -9,10 +9,7 @@ let connection;
 let db;
 
 beforeAll(async() => {
-    connection= await MongoClient.connect(global.__MONGO_URI__, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+    connection= await MongoClient.connect(global.__MONGO_URI__);
     db = await connection.db();
     mongodb.getDB = () => ({db: () => db});
     app = express();
@@ -48,11 +45,13 @@ describe('Goal Routes', () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
     });
+
     test('If the Goals Database is empty, Get All Goals should return an error message', async() => {
        const res = await request(app).get('/goals');
        expect(res.statusCode).toBe(404);
        expect(res.body).toEqual({ message: 'No goals found' });
     });
+
     test('Get Goals using a valid Username', async() => {
        await db.collection('goals').insertOne({
           username: "Test1",
@@ -67,6 +66,7 @@ describe('Goal Routes', () => {
        expect(res.statusCode).toBe(200);
        expect(res.body.length).toBeGreaterThan(0);  
     });
+    
     test('Get Goals using an invalid username should return an error message', async() => {
        const res= await request(app).get('/goals/FakeUser');
        expect(res.statusCode).toBe(404);

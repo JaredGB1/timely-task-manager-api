@@ -9,10 +9,7 @@ let connection;
 let db;
 
 beforeAll(async() => {
-    connection= await MongoClient.connect(global.__MONGO_URI__, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+    connection= await MongoClient.connect(global.__MONGO_URI__);
     db = await connection.db();
     mongodb.getDB = () => ({db: () => db});
     app = express();
@@ -57,11 +54,13 @@ describe('Goal Routes', () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
     });
+
     test('If the TimeLog Database is empty, Get All TimeLogs should return an error message', async() => {
        const res = await request(app).get('/timeLogs');
        expect(res.statusCode).toBe(404);
        expect(res.body).toEqual({ message: 'No time logs found' });
     });
+
     test('Get Time Logs using a valid Username should return a 200 status', async() => {
        await db.collection('time-logs').insertOne({
           username: "Test1",
@@ -75,11 +74,13 @@ describe('Goal Routes', () => {
        expect(res.statusCode).toBe(200);
        expect(res.body.length).toBeGreaterThan(0);  
     });
+
     test('Get Time Logs using an invalid username should return an error message', async() => {
        const res= await request(app).get('/timeLogs/FakeUser');
        expect(res.statusCode).toBe(404);
        expect(res.body).toEqual({ message: 'No time logs found' });
     });
+
     test('Get Specific Time Logs using a valid Username and a valid Task should work', async() => {
         await db.collection('time-logs').insertOne({
             username: "Test1",
@@ -93,6 +94,7 @@ describe('Goal Routes', () => {
          expect(res.statusCode).toBe(200);
          expect(res.body.length).toBeGreaterThan(0); 
     });
+
     test('Get Specific Time Logs using a valid Username and an invalid Task should return an error', async() =>{
         await db.collection('time-logs').insertOne({
             username: "Test1",
@@ -106,6 +108,7 @@ describe('Goal Routes', () => {
          expect(res.statusCode).toBe(404);
          expect(res.body).toEqual({ message: 'No time logs found' });
     });
+
     test('Get Specific Time Logs using an invalid Username and a valid Task should return an error', async() =>{
         await db.collection('time-logs').insertOne({
             username: "Test1",
@@ -119,6 +122,7 @@ describe('Goal Routes', () => {
          expect(res.statusCode).toBe(404);
          expect(res.body).toEqual({ message: 'No time logs found' });
     });
+    
     test('Get Specific Time Logs using an invalid Username and an invalid Task should return an error', async() =>{
 
          const res = await request(app).get('/timeLogs/InvalidUsername/InvalidTask');
