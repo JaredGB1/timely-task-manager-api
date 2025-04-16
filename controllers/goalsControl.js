@@ -135,7 +135,7 @@ const deleteGoal= async (req,res) =>
       }
 
       const goalId= new ObjectId(req.params.id);
-      const response = await mongodb.getDB().db().collection('tasks').deleteOne({ _id: goalId });
+      const response = await mongodb.getDB().db().collection('goals').deleteOne({ _id: goalId });
       if(response.deletedCount > 0)
         {
           res.status(204).send();
