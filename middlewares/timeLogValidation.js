@@ -3,7 +3,7 @@ const Joi = require('joi');
 const timeLogSchema = Joi.object({
     username: Joi.string().required(),
     task: Joi.string().required(),
-    duration: Joi.number().integer().required().strict(),
+    duration: Joi.string().required(),
     note: Joi.string().required()
 });
 
