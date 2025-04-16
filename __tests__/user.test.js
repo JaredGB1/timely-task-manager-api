@@ -34,7 +34,7 @@ describe('User Routes', () => {
       await db.collection('users').insertOne({
         username: "Test1",
         firstName: "Test",
-        lastName: "1",
+        lastName: "One",
         email: "test@email.com",
         birthday: "4/16/2025",
         creationDate: "4/16/2025 12:00:00",
