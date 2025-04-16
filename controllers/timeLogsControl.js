@@ -140,7 +140,7 @@ const updateTimeLog= async (req,res) =>
         return res.status(404).json({ message: 'The task was not found for this username. Please enter an existing task of the user to create a Time Log'});
       }
       //If the task is valid, the time log will be updated
-      const response= await mongodb.getDB().db().collection('time-logs').replaceOne({ _id: timeLogId }, task);
+      const response= await mongodb.getDB().db().collection('time-logs').replaceOne({ _id: timeLogId }, timeLog);
       if(response.modifiedCount > 0)
         {
          res.status(204).send();
