@@ -3,23 +3,28 @@ const express= require('express');
 const {MongoClient} = require('mongodb');
 const taskRoutes= require('../routes/tasks');
 const mongodb= require('../database/connect');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
+let mongoServer;
 let app;
 let connection;
 let db;
 
-beforeAll(async() => {
-    connection= await MongoClient.connect(global.__MONGO_URI__);
-    db = await connection.db();
-    mongodb.getDB = () => ({db: () => db});
-    app = express();
-    app.use(express.json());
-    app.use('/tasks', taskRoutes);
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  connection = await MongoClient.connect(uri);
+  db = await connection.db();
+  mongodb.getDB = () => ({ db: () => db });
+
+  app = express();
+  app.use(express.json());
+  app.use('/tasks', taskRoutes);
 });
 
 afterAll(async () => {
-    await connection.close();
-    
+  await connection.close();
+  await mongoServer.stop(); 
 });
 
 describe('Task Routes', () => {

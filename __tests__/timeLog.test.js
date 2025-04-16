@@ -3,23 +3,28 @@ const express= require('express');
 const {MongoClient} = require('mongodb');
 const timeLogRoutes= require('../routes/timeLogs');
 const mongodb= require('../database/connect');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
+let mongoServer;
 let app;
 let connection;
 let db;
 
-beforeAll(async() => {
-    connection= await MongoClient.connect(global.__MONGO_URI__);
-    db = await connection.db();
-    mongodb.getDB = () => ({db: () => db});
-    app = express();
-    app.use(express.json());
-    app.use('/timeLogs', timeLogRoutes);
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  connection = await MongoClient.connect(uri);
+  db = await connection.db();
+  mongodb.getDB = () => ({ db: () => db });
+
+  app = express();
+  app.use(express.json());
+  app.use('/timeLogs', timeLogRoutes);
 });
 
 afterAll(async () => {
-    await connection.close();
-    
+  await connection.close();
+  await mongoServer.stop(); 
 });
 
 describe('Goal Routes', () => {
