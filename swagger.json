@@ -5,7 +5,7 @@
     "description": "The Timely Task Manager API will help users manage their time. It will allow users to add tasks, log time spent on tasks, and set goals.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "timely-task-manager-api.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
