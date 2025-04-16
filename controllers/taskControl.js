@@ -4,7 +4,7 @@ const { format }=require('date-fns');
 const mongodb=require('../database/connect');
 
 const getSingleUsername=async (req, res) => {
-  // #swagger.tags=[Users]
+  // #swagger.tags=[Tasks]
   try
   {
     const username= req.params.username;
@@ -18,13 +18,13 @@ const getSingleUsername=async (req, res) => {
   catch (error) 
   {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while getting the user", error: error.message });
+    res.status(500).json({ message: "An error occurred while getting the tasks", error: error.message });
   }
  
   };  
 
 const getAll= async (req, res) => {
-  // #swagger.tags=[Users]
+  // #swagger.tags=[Tasks]
   try
   {
     const result= await mongodb.getDB().db().collection('tasks').find().toArray();
@@ -37,14 +37,14 @@ const getAll= async (req, res) => {
   catch (error) 
   {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while getting the users", error: error.message });
+    res.status(500).json({ message: "An error occurred while getting the tasks", error: error.message });
   }
   
   };
   
 const createTask= async (req,res) => 
   {
-    // #swagger.tags=[Users]
+    // #swagger.tags=[Tasks]
     try
     {
       //Creating a date object and applying format to insert it into the database
@@ -66,7 +66,7 @@ const createTask= async (req,res) =>
       const user= task.username;
       const result= await mongodb.getDB().db().collection('users').find({ username: user }).toArray();
       if (result.length === 0) {
-        return res.status(404).json({ message: 'No username found. Please create a new user or use an existing username to create a task'});
+        return res.status(404).json({ message: 'No username was found. Please create a new user or use an existing username to create a new task'});
       }
       //Inserting the task in the database if a valid username was used
       const response= await mongodb.getDB().db().collection('tasks').insertOne(task);
@@ -89,7 +89,7 @@ const createTask= async (req,res) =>
 
 const updateTask= async (req,res) =>
   {
-    // #swagger.tags=[Users]
+    // #swagger.tags=[Tasks]
     try
     {
       
@@ -117,7 +117,7 @@ const updateTask= async (req,res) =>
       const user= task.username;
       const r= await mongodb.getDB().db().collection('users').find({ username: user }).toArray();
       if (r.length === 0) {
-        return res.status(404).json({ message: 'No username found. Please create a new user or use an existing username to update the task'});
+        return res.status(404).json({ message: 'No username was found. Please create a new user or use an existing username to update the task'});
       }
       //If the username is valid, the task will be updated
       const response= await mongodb.getDB().db().collection('tasks').replaceOne({ _id: taskId }, task);
@@ -140,11 +140,11 @@ const updateTask= async (req,res) =>
   
 const deleteTask= async (req,res) =>
   {
-    // #swagger.tags=[Users]
+    // #swagger.tags=[Tasks]
     try
     {
       if (!ObjectId.isValid(req.params.id)) {
-        res.status(400).json('Must use a valid contact id to delete a task.');
+        res.status(400).json('Must use a valid task id to delete a task.');
       }
 
       const taskId= new ObjectId(req.params.id);

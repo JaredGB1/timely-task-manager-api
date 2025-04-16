@@ -1,16 +1,16 @@
 const Joi = require('joi');
 
-const taskSchema = Joi.object({
+const goalSchema = Joi.object({
     username: Joi.string().required(),
     title: Joi.string().required(),
     description: Joi.string().required(),
-    status: Joi.string().required(),
-    priority: Joi.string().required(),
-    dueDate: Joi.string().required(),
+    targetHours: Joi.number().integer().required().strict(),
+    currentProgress: Joi.string().required(),
+    deadline: Joi.string().required(),
 });
 
-const validateTask = (req, res, next) => {
-    const { error } = taskSchema.validate(req.body, { abortEarly: false });
+const validateGoal = (req, res, next) => {
+    const { error } = goalSchema.validate(req.body, { abortEarly: false });
 
     if (error) {
         const errorMessages = error.details.map((err) => err.message);
@@ -23,4 +23,4 @@ const validateTask = (req, res, next) => {
     next();
 };
 
-module.exports = validateTask;
+module.exports = validateGoal;
