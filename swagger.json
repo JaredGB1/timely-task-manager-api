@@ -10,10 +10,20 @@
   "schemes": [
     "https"
   ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "Tasks",
+      "description": "Operations related to tasks"
+    }
+  ],
   "paths": {
     "/users/": {
       "get": {
-        "tags": [],
+        "tags": ["Users"],
         "description": "",
         "produces": [
           "application/json"
@@ -31,7 +41,7 @@
         }
       },
       "post": {
-        "tags": [],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -77,7 +87,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [],
+        "tags": ["Users"],
         "description": "",
         "produces": [
           "application/json"
@@ -106,7 +116,7 @@
         }
       },
       "put": {
-        "tags": [],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -159,7 +169,7 @@
         }
       },
       "delete": {
-        "tags": [],
+        "tags": ["Users"],
         "description": "",
         "parameters": [
           {
@@ -184,7 +194,7 @@
     },
     "/tasks/": {
       "get": {
-        "tags": [],
+        "tags": ["Tasks"],
         "description": "",
         "produces": [
           "application/json"
@@ -202,7 +212,7 @@
         }
       },
       "post": {
-        "tags": [],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -251,7 +261,7 @@
     },
     "/tasks/{username}": {
       "get": {
-        "tags": [],
+        "tags": ["Tasks"],
         "description": "",
         "produces": [
           "application/json"
@@ -279,7 +289,7 @@
     },
     "/tasks/{id}": {
       "put": {
-        "tags": [],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
@@ -332,7 +342,7 @@
         }
       },
       "delete": {
-        "tags": [],
+        "tags": ["Tasks"],
         "description": "",
         "parameters": [
           {
