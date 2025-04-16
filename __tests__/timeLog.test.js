@@ -41,6 +41,13 @@ describe('Goal Routes', () => {
       await db.collection('time-logs').deleteMany({});
     });
   
+    test('If the TimeLog Database is empty, Get All TimeLogs should return an error message', async() => {
+      await db.collection('time-logs').deleteMany({});
+      const res = await request(app).get('/timeLogs');
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toEqual({ message: 'No time logs found' });
+    });
+
     test('Get All TimeLogs', async () => {
       await db.collection('time-logs').insertOne({
         username: "Test1",
@@ -53,12 +60,6 @@ describe('Goal Routes', () => {
       const res = await request(app).get('/timeLogs');
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
-    });
-
-    test('If the TimeLog Database is empty, Get All TimeLogs should return an error message', async() => {
-       const res = await request(app).get('/timeLogs');
-       expect(res.statusCode).toBe(404);
-       expect(res.body).toEqual({ message: 'No time logs found' });
     });
 
     test('Get Time Logs using a valid Username should return a 200 status', async() => {
@@ -122,7 +123,7 @@ describe('Goal Routes', () => {
          expect(res.statusCode).toBe(404);
          expect(res.body).toEqual({ message: 'No time logs found' });
     });
-    
+
     test('Get Specific Time Logs using an invalid Username and an invalid Task should return an error', async() =>{
 
          const res = await request(app).get('/timeLogs/InvalidUsername/InvalidTask');
